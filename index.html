@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hadi | 3D Designer</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=Montserrat:wght@900&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 
+                        sans: ['Tajawal', 'sans-serif'],
+                        display: ['Montserrat', 'sans-serif']
+                    },
+                    colors: {
+                        darkVoid: '#010409',
+                        iceBlue: '#00d2ff',
+                        studioGray: '#0d1117',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html { scroll-behavior: smooth; }
+        
+        body {
+            background-color: #010409;
+            color: #ffffff;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            font-family: 'Tajawal', sans-serif;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        .bg-canvas-layer {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 15% 25%, rgba(0, 210, 255, 0.08) 0%, transparent 40%),
+                        radial-gradient(circle at 85% 75%, rgba(0, 210, 255, 0.05) 0%, transparent 40%);
+            z-index: -1;
+        }
+
+        .premium-glass {
+            background: rgba(13, 17, 23, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .text-glow-blue {
+            text-shadow: 0 0 15px rgba(0, 210, 255, 0.5), 0 0 30px rgba(0, 210, 255, 0.2);
+        }
+
+        .top-left-asset {
+            position: absolute;
+            top: 120px;
+            left: 80px; 
+            width: 320px;
+            height: auto;
+            z-index: 10;
+            filter: drop-shadow(0 0 45px rgba(0, 210, 255, 0.45));
+            animation: float 10s ease-in-out infinite;
+            transition: opacity 0.5s ease;
+        }
+
+        @media (max-width: 1024px) {
+            .top-left-asset {
+                display: none !important;
+            }
+        }
+
+        .work-card {
+            border-radius: 1.5rem;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            background: #0d1117;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+        
+        .work-card:hover {
+            transform: scale(1.02);
+            border-color: rgba(0, 210, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .work-card video, .work-card img {
+            transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .work-card:hover img, .work-card:hover video {
+            transform: scale(1.1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .reveal { animation: fadeIn 0.8s forwards; opacity: 0; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0); }
+            50% { transform: translateY(-20px) rotate(-3deg); }
+        }
+
+        .hero-main-img {
+            filter: drop-shadow(0 0 50px rgba(255, 0, 0, 0.4));
+            transform: translateY(40px) scale(1.1);
+            transition: none;
+        }
+
+        .no-scroll { overflow: hidden; }
+
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #010409; }
+        ::-webkit-scrollbar-thumb { background: #00d2ff; border-radius: 10px; }
+
+        .corner-asset {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 280px;
+            height: auto;
+            opacity: 0.85;
+            pointer-events: none;
+            z-index: 10;
+        }
+        @media (max-width: 768px) {
+            .corner-asset {
+                width: 150px;
+            }
+        }
+    </style>
+</head>
+<body class="selection:bg-iceBlue selection:text-darkVoid">
+
+    <div class="bg-canvas-layer"></div>
+
+    <header class="fixed top-2 md:top-4 left-0 right-0 z-[100] px-3 md:px-6">
+        <nav class="max-w-6xl mx-auto premium-glass rounded-2xl md:rounded-[2rem] px-4 md:px-8 py-3 md:py-4 flex items-center justify-between">
+            <div class="flex items-center gap-2 md:gap-3 cursor-pointer group" onclick="showMain()">
+                <div class="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-iceBlue flex items-center justify-center transition-transform group-hover:rotate-12 shadow-[0_0_15px_rgba(0,210,255,0.3)]">
+                    <i class="fas fa-cube text-darkVoid text-xs md:text-sm"></i>
+                </div>
+                <span class="text-lg md:text-xl font-black tracking-tight font-display uppercase">ART_HADI</span>
+            </div>
+
+            <div class="hidden md:flex gap-10 font-bold text-[10px] uppercase tracking-[0.2em] text-gray-300">
+                <a onclick="showMain()" class="hover:text-iceBlue transition-colors cursor-pointer">الرئيسية</a>
+                <a href="#gallery" onclick="showMain()" class="hover:text-iceBlue transition-colors cursor-pointer">المعرض</a>
+                <a href="#footer" class="hover:text-iceBlue transition-colors cursor-pointer">تواصل</a>
+            </div>
+
+            <div class="flex items-center gap-2 md:gap-3">
+                <a href="https://x.com/hadii_2004" target="_blank" class="w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center border border-white/5 hover:bg-iceBlue hover:text-darkVoid transition-all"><i class="fab fa-twitter text-xs md:text-sm"></i></a>
+                <a href="https://www.instagram.com/hadii__2004/" target="_blank" class="w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center border border-white/5 hover:bg-iceBlue hover:text-darkVoid transition-all"><i class="fab fa-instagram text-xs md:text-sm"></i></a>
+            </div>
+        </nav>
+    </header>
+
+    <img id="top-asset" src="Portfolio/pp.png" alt="Featured Visual Element" onerror="this.style.display='none'" class="top-left-asset">
+
+    <main id="main-view">
+        <section class="min-h-[60vh] md:min-h-[80vh] flex flex-col justify-center px-6 md:px-24 pt-32 relative">
+            <div class="max-w-5xl z-20">
+                <h1 class="text-5xl md:text-8xl font-black mb-8 leading-[1.1] tracking-tighter reveal" style="animation-delay: 0.1s">
+                    <span class="text-glow-blue text-iceBlue">هـادي</span>
+                </h1>
+
+                <div class="space-y-4 mb-10 reveal" style="animation-delay: 0.2s">
+                    <p class="text-white text-lg md:text-3xl font-bold tracking-wide">
+                        مصمم ثلاثي أبعاد (3D Designer)
+                    </p>
+                    <p class="text-iceBlue/80 text-base md:text-xl font-medium tracking-wide">
+                        القطيف، المملكة العربية السعودية | مواليد 2004
+                    </p>
+                </div>
+
+                <div class="flex gap-4 reveal" style="animation-delay: 0.3s">
+                    <button onclick="document.getElementById('gallery').scrollIntoView({behavior:'smooth'})" class="px-8 md:px-10 py-4 md:py-5 bg-iceBlue text-darkVoid font-black rounded-xl hover:shadow-[0_0_25px_rgba(0,210,255,0.4)] transition-all uppercase tracking-tighter text-xs">
+                        استكشف الأعمال
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="gallery" class="py-12 px-4 md:px-6">
+            <div class="max-w-7xl mx-auto">
+                
+                <div class="flex flex-col md:flex-row-reverse items-center justify-between mb-12 md:mb-20 gap-8 md:gap-0">
+                    <div class="hidden md:flex w-full md:w-5/12 justify-center md:justify-end relative">
+                        <div class="absolute inset-0 bg-red-600/10 blur-[120px] rounded-full"></div>
+                        <img src="Portfolio/ggb.png" alt="Hadi Visual" onerror="this.style.display='none'" class="relative z-10 w-full max-w-[480px] hero-main-img drop-shadow-2xl">
+                    </div>
+
+                    <div class="w-full md:w-7/12 text-center md:text-right md:pr-10 lg:pr-20">
+                        <div class="mb-8 md:mb-12">
+                            <h2 class="text-4xl md:text-7xl lg:text-8xl font-black mb-4 tracking-tighter italic leading-tight">الإبداع البصري</h2>
+                            <p class="text-iceBlue/60 font-display font-bold tracking-[0.3em] md:tracking-[0.5em] text-[10px] md:text-[12px] uppercase">Curated Portfolio</p>
+                        </div>
+                        
+                        <div class="inline-flex p-1.5 premium-glass rounded-2xl gap-1 max-w-full overflow-x-auto">
+                            <button class="tab-btn px-6 md:px-8 py-3 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all bg-iceBlue text-darkVoid" data-cat="products">Products</button>
+                            <button class="tab-btn px-6 md:px-8 py-3 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-white transition-all" data-cat="characters">Characters</button>
+                            <button class="tab-btn px-6 md:px-8 py-3 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-white transition-all" data-cat="videos">Videos</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="portfolio-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 transition-opacity duration-300">
+                </div>
+
+                <div class="mt-20 md:mt-32 text-center">
+                    <button onclick="showArchive()" class="group premium-glass px-8 md:px-12 py-5 md:py-6 rounded-2xl border border-white/5 hover:border-iceBlue transition-all w-full md:w-auto">
+                        <span class="flex items-center justify-center gap-4 text-gray-300 group-hover:text-iceBlue font-black uppercase tracking-widest text-[10px] md:text-[11px]">
+                            جميع أعمالي
+                            <i class="fas fa-arrow-left transition-transform group-hover:-translate-x-2"></i>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <section id="archive-view" class="hidden min-h-screen pt-32 pb-20 px-4 md:px-6 bg-darkVoid">
+        <div class="max-w-7xl mx-auto">
+            <button onclick="showMain()" class="mb-8 md:mb-12 flex items-center gap-3 text-gray-400 hover:text-iceBlue transition-colors">
+                <i class="fas fa-chevron-right text-xs"></i>
+                <span class="font-black text-[9px] md:text-[10px] uppercase tracking-widest">العودة للرئيسية</span>
+            </button>
+            <h2 class="text-4xl md:text-8xl font-black mb-10 md:mb-16 italic font-display">أعمالي<span class="text-iceBlue"></span></h2>
+            <div id="archive-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
+            </div>
+        </div>
+    </section>
+
+    <footer id="footer" class="py-16 md:py-24 border-t border-white/5 mt-10 md:mt-20 relative">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <div class="flex flex-wrap justify-center gap-6 md:gap-8 mb-16 md:mb-20">
+                <a href="https://x.com/hadii_2004" target="_blank" class="flex flex-col items-center gap-3 group">
+                    <div class="w-14 h-14 md:w-16 md:h-16 rounded-2xl premium-glass flex items-center justify-center border border-white/5 group-hover:border-iceBlue group-hover:bg-iceBlue/5 transition-all duration-500">
+                        <i class="fab fa-twitter text-lg md:text-xl text-gray-400 group-hover:text-iceBlue transition-all"></i>
+                    </div>
+                    <span class="font-black uppercase tracking-widest text-[8px] md:text-[9px] text-gray-500 group-hover:text-iceBlue transition-colors">Twitter (X)</span>
+                </a>
+                <a href="https://www.instagram.com/hadii__2004/" target="_blank" class="flex flex-col items-center gap-3 group">
+                    <div class="w-14 h-14 md:w-16 md:h-16 rounded-2xl premium-glass flex items-center justify-center border border-white/5 group-hover:border-iceBlue group-hover:bg-iceBlue/5 transition-all duration-500">
+                        <i class="fab fa-instagram text-lg md:text-xl text-gray-400 group-hover:text-iceBlue transition-all"></i>
+                    </div>
+                    <span class="font-black uppercase tracking-widest text-[8px] md:text-[9px] text-gray-500 group-hover:text-iceBlue transition-colors">Instagram</span>
+                </a>
+                <a href="https://linktr.ee/art_hadi" target="_blank" class="flex flex-col items-center gap-3 group">
+                    <div class="w-14 h-14 md:w-16 md:h-16 rounded-2xl premium-glass flex items-center justify-center border border-white/5 group-hover:border-iceBlue group-hover:bg-iceBlue/5 transition-all duration-500">
+                        <i class="fas fa-link text-lg md:text-xl text-gray-400 group-hover:text-iceBlue transition-all"></i>
+                    </div>
+                    <span class="font-black uppercase tracking-widest text-[8px] md:text-[9px] text-gray-500 group-hover:text-iceBlue transition-colors">Linktree</span>
+                </a>
+            </div>
+            <p class="text-gray-600 font-display font-bold uppercase tracking-[0.5em] md:tracking-[1em] text-[7px] md:text-[8px]">&copy; 2025 HADI DESIGN STUDIO</p>
+        </div>
+        <img src="Portfolio/hh1.png" alt="Branding Asset" onerror="this.style.display='none'" class="corner-asset">
+    </footer>
+
+    <div id="lightbox" class="fixed inset-0 z-[200] hidden items-center justify-center p-2 md:p-4">
+        <div class="absolute inset-0 bg-darkVoid/98 backdrop-blur-xl" id="lb-bg" onclick="closeLightbox()"></div>
+        <button onclick="closeLightbox()" class="absolute top-4 right-4 md:top-8 md:right-8 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-white/5 hover:bg-red-500/20 text-white z-[210]">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 flex gap-4 z-[210]">
+            <button id="prev-btn" class="w-12 h-12 md:w-14 md:h-14 premium-glass rounded-full text-white"><i class="fas fa-chevron-right"></i></button>
+            <button id="next-btn" class="w-12 h-12 md:w-14 md:h-14 premium-glass rounded-full text-white"><i class="fas fa-chevron-left"></i></button>
+        </div>
+        <div id="lightbox-content" class="relative z-[205] w-full max-w-5xl h-[70vh] md:h-[80vh] flex items-center justify-center">
+        </div>
+    </div>
+
+    <script>
+        // تمت إضافة Portfolio/ قبل كل اسم ملف
+        const portfolioData = {
+            products: {
+                display: ["Portfolio/mm.png", "Portfolio/Gramophone.png", "Portfolio/perfume.png", "Portfolio/perfume3.png"],
+                full: ["Portfolio/mm.png", "Portfolio/Gramophone.png", "Portfolio/perfume.png", "Portfolio/perfume3.png", "Portfolio/Strawberry.png", "Portfolio/perfume1.png", "Portfolio/nn.png", "Portfolio/perfume6.jpg", "Portfolio/perfume7.png"]
+            },
+            characters: {
+                display: ["Portfolio/anime 1.png", "Portfolio/anime 2.png", "Portfolio/anime 3.png", "Portfolio/bb.png"],
+                full: ["Portfolio/anime 1.png", "Portfolio/anime 2.png", "Portfolio/anime 3.png", "Portfolio/bb.png", "Portfolio/oo.png", "Portfolio/tt.png", "Portfolio/zz.png", "Portfolio/xx.png"]
+            },
+            videos: {
+                display: ["Portfolio/Strawberry1.mp4", "Portfolio/room1.mp4", "Portfolio/perfume4.mp4", "Portfolio/perfume5.MP4"],
+                full: ["Portfolio/Strawberry1.mp4", "Portfolio/room1.mp4", "Portfolio/perfume4.mp4", "Portfolio/perfume5.MP4"]
+            },
+            others: ["Portfolio/vv1.png", "Portfolio/vv2.png", "Portfolio/hh.png", "Portfolio/ss2.png", "Portfolio/xx1.png", "Portfolio/xx2.png", "Portfolio/mm0.png", "Portfolio/mm8.png", "Portfolio/yy3.png", "Portfolio/gg5.png", "Portfolio/ghost.png", "Portfolio/mm1.png", "Portfolio/aa.png", "Portfolio/vv.png", "Portfolio/uu0.png", "Portfolio/ww2.png", "Portfolio/ff5.png", "Portfolio/dd4.png", "Portfolio/99h.png", "Portfolio/ww0.png", "Portfolio/jj5.png", "Portfolio/jj8.png", "Portfolio/tt3.png", "Portfolio/kk8.png", "Portfolio/nb7.png", "Portfolio/room.png", "Portfolio/room2.png", "Portfolio/room3.png", "Portfolio/room4.png", "Portfolio/room5.png", "Portfolio/room6.png", "Portfolio/room7.png", "Portfolio/room8.png"]
+        };
+
+        let activeList = [];
+        let activeIdx = 0;
+        const isVideo = (p) => p.toLowerCase().match(/\.(mp4|mov|webm)$/);
+
+        function createItem(src, idx, isArchive = false) {
+            const card = document.createElement('div');
+            card.className = `work-card group cursor-pointer aspect-square relative`;
+            if (isVideo(src)) {
+                card.innerHTML = `<video src="${src}" class="w-full h-full object-cover" muted loop playsinline></video>
+                                  <div class="absolute inset-0 bg-black/40 flex items-center justify-center md:opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <div class="w-10 h-10 rounded-full bg-iceBlue flex items-center justify-center text-darkVoid"><i class="fas fa-play ml-1"></i></div>
+                                  </div>`;
+                const v = card.querySelector('video');
+                card.onmouseenter = () => v.play();
+                card.onmouseleave = () => { v.pause(); v.currentTime = 0; };
+            } else {
+                card.innerHTML = `<img src="${src}" class="w-full h-full object-cover" loading="lazy" onerror="this.src='https://placehold.co/400x400/0d1117/00d2ff?text=Hadi+Art'">
+                                  <div class="absolute inset-0 bg-iceBlue/10 md:opacity-0 group-hover:opacity-100 transition-opacity"></div>`;
+            }
+            card.onclick = () => {
+                const btn = document.querySelector('.tab-btn.bg-iceBlue');
+                activeList = isArchive ? portfolioData.others : portfolioData[btn.dataset.cat].full;
+                openLightbox(idx);
+            };
+            return card;
+        }
+
+        function loadGrid(cat) {
+            const g = document.getElementById('portfolio-grid');
+            if(!g) return;
+            g.style.opacity = '0';
+            setTimeout(() => {
+                g.innerHTML = '';
+                portfolioData[cat].display.forEach((s, i) => {
+                    const item = createItem(s, i);
+                    item.classList.add('reveal');
+                    item.style.animationDelay = `${i * 0.1}s`;
+                    g.appendChild(item);
+                });
+                g.style.opacity = '1';
+            }, 300);
+        }
+
+        function showArchive() {
+            document.getElementById('main-view').classList.add('hidden');
+            document.getElementById('archive-view').classList.remove('hidden');
+            document.getElementById('top-asset').style.display = 'none';
+
+            const g = document.getElementById('archive-grid');
+            g.innerHTML = '';
+            portfolioData.others.forEach((s, i) => g.appendChild(createItem(s, i, true)));
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showMain() {
+            document.getElementById('archive-view').classList.add('hidden');
+            document.getElementById('main-view').classList.remove('hidden');
+            if (window.innerWidth > 1024) {
+                document.getElementById('top-asset').style.display = 'block';
+            }
+            loadGrid(document.querySelector('.tab-btn.bg-iceBlue').dataset.cat);
+        }
+
+        function openLightbox(i) {
+            activeIdx = i;
+            updateLightbox();
+            document.getElementById('lightbox').classList.replace('hidden', 'flex');
+            document.body.classList.add('no-scroll');
+        }
+
+        function updateLightbox() {
+            const s = activeList[activeIdx];
+            const c = document.getElementById('lightbox-content');
+            c.style.opacity = '0';
+            setTimeout(() => {
+                c.innerHTML = isVideo(s) ? `<video src="${s}" controls autoplay loop class="max-w-full max-h-full rounded-xl"></video>` : `<img src="${s}" class="max-w-full max-h-full object-contain rounded-xl">`;
+                c.style.opacity = '1';
+            }, 200);
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.replace('flex', 'hidden');
+            document.body.classList.remove('no-scroll');
+        }
+
+        document.getElementById('next-btn').onclick = (e) => { e.stopPropagation(); activeIdx = (activeIdx+1)%activeList.length; updateLightbox(); };
+        document.getElementById('prev-btn').onclick = (e) => { e.stopPropagation(); activeIdx = (activeIdx-1+activeList.length)%activeList.length; updateLightbox(); };
+
+        document.querySelectorAll('.tab-btn').forEach(b => {
+            b.onclick = () => {
+                document.querySelectorAll('.tab-btn').forEach(x => x.className = "tab-btn px-6 md:px-8 py-3 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-white transition-all");
+                b.className = "tab-btn px-6 md:px-8 py-3 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all bg-iceBlue text-darkVoid";
+                loadGrid(b.dataset.cat);
+            };
+        });
+
+        window.onload = () => {
+            loadGrid('products');
+            const obs = new IntersectionObserver((es) => es.forEach(e => e.isIntersecting && e.target.classList.add('reveal')), {threshold: 0.1});
+            document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+        };
+    </script>
+</body>
+</html>
