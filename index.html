@@ -12,7 +12,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <script>
         tailwind.config = {
             theme: {
@@ -30,7 +29,6 @@
             }
         }
     </script>
-
     <style>
         html { scroll-behavior: smooth; }
         
@@ -43,7 +41,6 @@
             position: relative;
             min-height: 100vh;
         }
-
         .bg-canvas-layer {
             position: fixed;
             inset: 0;
@@ -51,7 +48,6 @@
                         radial-gradient(circle at 85% 75%, rgba(0, 210, 255, 0.05) 0%, transparent 40%);
             z-index: -1;
         }
-
         .premium-glass {
             background: rgba(13, 17, 23, 0.4);
             backdrop-filter: blur(20px);
@@ -59,11 +55,9 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         }
-
         .text-glow-blue {
             text-shadow: 0 0 15px rgba(0, 210, 255, 0.5), 0 0 30px rgba(0, 210, 255, 0.2);
         }
-
         .top-left-asset {
             position: absolute;
             top: 120px;
@@ -75,13 +69,11 @@
             animation: float 10s ease-in-out infinite;
             transition: opacity 0.5s ease;
         }
-
         @media (max-width: 1024px) {
             .top-left-asset {
                 display: none !important;
             }
         }
-
         .work-card {
             border-radius: 1.5rem;
             overflow: hidden;
@@ -95,39 +87,30 @@
             border-color: rgba(0, 210, 255, 0.3);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
-
         .work-card video, .work-card img {
             transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
         }
-
         .work-card:hover img, .work-card:hover video {
             transform: scale(1.1);
         }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
         .reveal { animation: fadeIn 0.8s forwards; opacity: 0; }
-
         @keyframes float {
             0%, 100% { transform: translateY(0) rotate(0); }
             50% { transform: translateY(-20px) rotate(-3deg); }
         }
-
         .hero-main-img {
             filter: drop-shadow(0 0 50px rgba(255, 0, 0, 0.4));
             transform: translateY(40px) scale(1.1);
             transition: none;
         }
-
         .no-scroll { overflow: hidden; }
-
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: #010409; }
         ::-webkit-scrollbar-thumb { background: #00d2ff; border-radius: 10px; }
-
         .corner-asset {
             position: absolute;
             bottom: 0;
@@ -143,12 +126,66 @@
                 width: 150px;
             }
         }
+        /* Lightbox Specific Styles for Previews */
+        .lb-main {
+            max-width: 80%;
+            max-height: 100%;
+            object-fit: contain;
+            position: relative;
+            z-index: 20;
+            box-shadow: 0 0 40px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+        }
+        
+        /* Previous Preview (Right Side in RTL) */
+        .lb-prev-preview {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translate(60%, -50%) scale(0.65);
+            height: 45%;
+            width: auto;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            opacity: 0.3;
+            border-radius: 12px;
+            z-index: 10;
+            filter: blur(1px) brightness(0.5);
+            pointer-events: none;
+            transition: all 0.4s ease;
+        }
+        /* Next Preview (Left Side in RTL) */
+        .lb-next-preview {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translate(-60%, -50%) scale(0.65);
+            height: 45%;
+            width: auto;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            opacity: 0.3;
+            border-radius: 12px;
+            z-index: 10;
+            filter: blur(1px) brightness(0.5);
+            pointer-events: none;
+            transition: all 0.4s ease;
+        }
+        @media (max-width: 768px) {
+            .lb-main { max-width: 75%; }
+            .lb-prev-preview {
+                transform: translate(50%, -50%) scale(0.5);
+                right: -10px;
+            }
+            .lb-next-preview {
+                transform: translate(-50%, -50%) scale(0.5);
+                left: -10px;
+            }
+        }
     </style>
 </head>
 <body class="selection:bg-iceBlue selection:text-darkVoid">
-
     <div class="bg-canvas-layer"></div>
-
     <header class="fixed top-2 md:top-4 left-0 right-0 z-[100] px-3 md:px-6">
         <nav class="max-w-6xl mx-auto premium-glass rounded-2xl md:rounded-[2rem] px-4 md:px-8 py-3 md:py-4 flex items-center justify-between">
             <div class="flex items-center gap-2 md:gap-3 cursor-pointer group" onclick="showMain()">
@@ -157,29 +194,24 @@
                 </div>
                 <span class="text-lg md:text-xl font-black tracking-tight font-display uppercase">ART_HADI</span>
             </div>
-
             <div class="hidden md:flex gap-10 font-bold text-[10px] uppercase tracking-[0.2em] text-gray-300">
                 <a onclick="showMain()" class="hover:text-iceBlue transition-colors cursor-pointer">الرئيسية</a>
                 <a href="#gallery" onclick="showMain()" class="hover:text-iceBlue transition-colors cursor-pointer">المعرض</a>
                 <a href="#footer" class="hover:text-iceBlue transition-colors cursor-pointer">تواصل</a>
             </div>
-
             <div class="flex items-center gap-2 md:gap-3">
                 <a href="https://x.com/hadii_2004" target="_blank" class="w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center border border-white/5 hover:bg-iceBlue hover:text-darkVoid transition-all"><i class="fab fa-twitter text-xs md:text-sm"></i></a>
                 <a href="https://www.instagram.com/hadii__2004/" target="_blank" class="w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center border border-white/5 hover:bg-iceBlue hover:text-darkVoid transition-all"><i class="fab fa-instagram text-xs md:text-sm"></i></a>
             </div>
         </nav>
     </header>
-
     <img id="top-asset" src="Portfolio/pp.png" alt="Featured Visual Element" onerror="this.style.display='none'" class="top-left-asset">
-
     <main id="main-view">
         <section class="min-h-[60vh] md:min-h-[80vh] flex flex-col justify-center px-6 md:px-24 pt-32 relative">
             <div class="max-w-5xl z-20">
                 <h1 class="text-5xl md:text-8xl font-black mb-8 leading-[1.1] tracking-tighter reveal" style="animation-delay: 0.1s">
                     <span class="text-glow-blue text-iceBlue">هـادي</span>
                 </h1>
-
                 <div class="space-y-4 mb-10 reveal" style="animation-delay: 0.2s">
                     <p class="text-white text-lg md:text-3xl font-bold tracking-wide">
                         مصمم ثلاثي أبعاد (3D Designer)
@@ -188,7 +220,6 @@
                         القطيف، المملكة العربية السعودية | مواليد 2004
                     </p>
                 </div>
-
                 <div class="flex gap-4 reveal" style="animation-delay: 0.3s">
                     <button onclick="document.getElementById('gallery').scrollIntoView({behavior:'smooth'})" class="px-8 md:px-10 py-4 md:py-5 bg-iceBlue text-darkVoid font-black rounded-xl hover:shadow-[0_0_25px_rgba(0,210,255,0.4)] transition-all uppercase tracking-tighter text-xs">
                         استكشف الأعمال
@@ -196,7 +227,6 @@
                 </div>
             </div>
         </section>
-
         <section id="gallery" class="py-12 px-4 md:px-6">
             <div class="max-w-7xl mx-auto">
                 
@@ -205,7 +235,6 @@
                         <div class="absolute inset-0 bg-red-600/10 blur-[120px] rounded-full"></div>
                         <img src="Portfolio/ggb.png" alt="Hadi Visual" onerror="this.style.display='none'" class="relative z-10 w-full max-w-[480px] hero-main-img drop-shadow-2xl">
                     </div>
-
                     <div class="w-full md:w-7/12 text-center md:text-right md:pr-10 lg:pr-20">
                         <div class="mb-8 md:mb-12">
                             <h2 class="text-4xl md:text-7xl lg:text-8xl font-black mb-4 tracking-tighter italic leading-tight">الإبداع البصري</h2>
@@ -219,10 +248,8 @@
                         </div>
                     </div>
                 </div>
-
                 <div id="portfolio-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 transition-opacity duration-300">
                 </div>
-
                 <div class="mt-20 md:mt-32 text-center">
                     <button onclick="showArchive()" class="group premium-glass px-8 md:px-12 py-5 md:py-6 rounded-2xl border border-white/5 hover:border-iceBlue transition-all w-full md:w-auto">
                         <span class="flex items-center justify-center gap-4 text-gray-300 group-hover:text-iceBlue font-black uppercase tracking-widest text-[10px] md:text-[11px]">
@@ -234,7 +261,6 @@
             </div>
         </section>
     </main>
-
     <section id="archive-view" class="hidden min-h-screen pt-32 pb-20 px-4 md:px-6 bg-darkVoid">
         <div class="max-w-7xl mx-auto">
             <button onclick="showMain()" class="mb-8 md:mb-12 flex items-center gap-3 text-gray-400 hover:text-iceBlue transition-colors">
@@ -246,7 +272,6 @@
             </div>
         </div>
     </section>
-
     <footer id="footer" class="py-16 md:py-24 border-t border-white/5 mt-10 md:mt-20 relative">
         <div class="max-w-4xl mx-auto px-6 text-center">
             <div class="flex flex-wrap justify-center gap-6 md:gap-8 mb-16 md:mb-20">
@@ -273,7 +298,6 @@
         </div>
         <img src="Portfolio/hh1.png" alt="Branding Asset" onerror="this.style.display='none'" class="corner-asset">
     </footer>
-
     <div id="lightbox" class="fixed inset-0 z-[200] hidden items-center justify-center p-2 md:p-4">
         <div class="absolute inset-0 bg-darkVoid/98 backdrop-blur-xl" id="lb-bg" onclick="closeLightbox()"></div>
         <button onclick="closeLightbox()" class="absolute top-4 right-4 md:top-8 md:right-8 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-white/5 hover:bg-red-500/20 text-white z-[210]">
@@ -286,7 +310,6 @@
         <div id="lightbox-content" class="relative z-[205] w-full max-w-5xl h-[70vh] md:h-[80vh] flex items-center justify-center">
         </div>
     </div>
-
     <script>
         const portfolioData = {
             products: {
@@ -301,13 +324,11 @@
                 display: ["Portfolio/Strawberry1.mp4", "Portfolio/room1.mp4", "Portfolio/perfume4.mp4"],
                 full: ["Portfolio/Strawberry1.mp4", "Portfolio/room1.mp4", "Portfolio/perfume4.mp4"]
             },
-            others: ["Portfolio/vv1.png", "Portfolio/vv2.png", "Portfolio/hh.png", "Portfolio/ss2.png", "Portfolio/xx1.png", "Portfolio/xx2.png", "Portfolio/mm0.png", "Portfolio/mm8.png", "Portfolio/yy3.png", "Portfolio/gg5.png", "Portfolio/ghost.png", "Portfolio/mm1.png", "Portfolio/aa.png", "Portfolio/vv.png", "Portfolio/uu0.png", "Portfolio/ww2.png", "Portfolio/ff5.png", "Portfolio/dd4.png", "Portfolio/99h.png", "Portfolio/ww0.png", "Portfolio/jj5.png", "Portfolio/jj8.png", "Portfolio/tt3.png", "Portfolio/kk8.png", "Portfolio/nb7.png", "Portfolio/ff9.png", "Portfolio/jj65.png", "Portfolio/dd9.png", "Portfolio/xx.png", "Portfolio/room.png", "Portfolio/room2.png", "Portfolio/room3.png", "Portfolio/room4.png", "Portfolio/room5.png", "Portfolio/room6.png", "Portfolio/room7.png", "Portfolio/room8.png"]
+            others: ["Portfolio/55a.png", "Portfolio/99p.png", "Portfolio/vv1.png", "Portfolio/vv2.png", "Portfolio/hh.png", "Portfolio/ss2.png", "Portfolio/xx1.png", "Portfolio/xx2.png", "Portfolio/mm0.png", "Portfolio/mm8.png", "Portfolio/yy3.png", "Portfolio/gg5.png", "Portfolio/ghost.png", "Portfolio/mm1.png", "Portfolio/aa.png", "Portfolio/vv.png", "Portfolio/uu0.png", "Portfolio/ww2.png", "Portfolio/ff5.png", "Portfolio/dd4.png", "Portfolio/99h.png", "Portfolio/ww0.png", "Portfolio/jj5.png", "Portfolio/jj8.png", "Portfolio/tt3.png", "Portfolio/kk8.png", "Portfolio/nb7.png", "Portfolio/ff9.png", "Portfolio/jj65.png", "Portfolio/dd9.png", "Portfolio/xx.png", "Portfolio/room.png", "Portfolio/room2.png", "Portfolio/room3.png", "Portfolio/room4.png", "Portfolio/room5.png", "Portfolio/room6.png", "Portfolio/room7.png", "Portfolio/room8.png"]
         };
-
         let activeList = [];
         let activeIdx = 0;
         const isVideo = (p) => p.toLowerCase().match(/\.(mp4|mov|webm)$/);
-
         function createItem(src, idx, isArchive = false) {
             const card = document.createElement('div');
             card.className = `work-card group cursor-pointer aspect-square relative`;
@@ -330,7 +351,6 @@
             };
             return card;
         }
-
         function loadGrid(cat) {
             const g = document.getElementById('portfolio-grid');
             if(!g) return;
@@ -346,18 +366,15 @@
                 g.style.opacity = '1';
             }, 300);
         }
-
         function showArchive() {
             document.getElementById('main-view').classList.add('hidden');
             document.getElementById('archive-view').classList.remove('hidden');
             document.getElementById('top-asset').style.display = 'none';
-
             const g = document.getElementById('archive-grid');
             g.innerHTML = '';
             portfolioData.others.forEach((s, i) => g.appendChild(createItem(s, i, true)));
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-
         function showMain() {
             document.getElementById('archive-view').classList.add('hidden');
             document.getElementById('main-view').classList.remove('hidden');
@@ -366,32 +383,46 @@
             }
             loadGrid(document.querySelector('.tab-btn.bg-iceBlue').dataset.cat);
         }
-
         function openLightbox(i) {
             activeIdx = i;
             updateLightbox();
             document.getElementById('lightbox').classList.replace('hidden', 'flex');
             document.body.classList.add('no-scroll');
         }
-
         function updateLightbox() {
             const s = activeList[activeIdx];
+            const len = activeList.length;
+            const nextIdx = (activeIdx + 1) % len;
+            const prevIdx = (activeIdx - 1 + len) % len;
+            const n = activeList[nextIdx];
+            const p = activeList[prevIdx];
             const c = document.getElementById('lightbox-content');
             c.style.opacity = '0';
+            
             setTimeout(() => {
-                c.innerHTML = isVideo(s) ? `<video src="${s}" controls autoplay loop class="max-w-full max-h-full rounded-xl"></video>` : `<img src="${s}" class="max-w-full max-h-full object-contain rounded-xl">`;
+                const mainHtml = isVideo(s) 
+                    ? `<video src="${s}" controls autoplay loop class="lb-main rounded-xl"></video>` 
+                    : `<img src="${s}" class="lb-main rounded-xl">`;
+                const nextHtml = isVideo(n)
+                    ? `<video src="${n}" muted loop class="lb-next-preview border border-white/10"></video>`
+                    : `<img src="${n}" class="lb-next-preview border border-white/10">`;
+                const prevHtml = isVideo(p)
+                    ? `<video src="${p}" muted loop class="lb-prev-preview border border-white/10"></video>`
+                    : `<img src="${p}" class="lb-prev-preview border border-white/10">`;
+                c.innerHTML = prevHtml + mainHtml + nextHtml;
                 c.style.opacity = '1';
+                
+                c.querySelectorAll('video.lb-next-preview, video.lb-prev-preview').forEach(v => {
+                    v.play().catch(e => {});
+                });
             }, 200);
         }
-
         function closeLightbox() {
             document.getElementById('lightbox').classList.replace('flex', 'hidden');
             document.body.classList.remove('no-scroll');
         }
-
         document.getElementById('next-btn').onclick = (e) => { e.stopPropagation(); activeIdx = (activeIdx+1)%activeList.length; updateLightbox(); };
         document.getElementById('prev-btn').onclick = (e) => { e.stopPropagation(); activeIdx = (activeIdx-1+activeList.length)%activeList.length; updateLightbox(); };
-
         document.querySelectorAll('.tab-btn').forEach(b => {
             b.onclick = () => {
                 document.querySelectorAll('.tab-btn').forEach(x => x.className = "tab-btn px-6 md:px-8 py-3 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-white transition-all");
@@ -399,7 +430,6 @@
                 loadGrid(b.dataset.cat);
             };
         });
-
         window.onload = () => {
             loadGrid('products');
             const obs = new IntersectionObserver((es) => es.forEach(e => e.isIntersecting && e.target.classList.add('reveal')), {threshold: 0.1});
